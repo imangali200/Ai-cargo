@@ -1,0 +1,93 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Put,
+  Query,
+  Req,
+} from '@nestjs/common';
+import { UserService } from './user.service';
+import { Auth } from 'src/core/decorators/auth.decorators';
+import { UserRoles } from 'src/core/db/enums/user.enum';
+import { CreateUser } from './dto/createUser.dto';
+import { ApiOperation, ApiProperty } from '@nestjs/swagger';
+import { RegisterDto } from '../auth/dto/register.dto';
+
+@Controller('user')
+export class UserController {
+  constructor(private readonly userService: UserService) {}
+
+  @ApiOperation({ summary: 'create user by admin' })
+  @Post()
+  @Auth([UserRoles.SUPERADMIN])
+  async createUser(@Body() createUser: CreateUser) {
+    return await this.userService.createByAdmin(createUser);
+  }
+
+  @ApiOperation({ summary: 'get all the users' })
+  @Get()
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async getUsers() {
+    return await this.userService.findUsers();
+  }
+
+  @ApiOperation({ summary: 'get users from archive' })
+  @Get('archive')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async archiveUsers() {
+    return await this.userService.getArchiveUsers();
+  }
+
+  @ApiOperation({summary:"get admins for the branches"})
+  @Auth([UserRoles.SUPERADMIN])
+  @Get('admins')
+  async getAdmins(){
+    return await this.userService.getAdmins()
+  }
+
+  @ApiOperation({ summary: 'search with (name,phonenumber,surname,role)' })
+  @Get(':search')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async searchUsers(@Query('search') search: string) {
+    return await this.userService.searchUsers(search);
+  }
+
+  @ApiOperation({ summary: 'update user' })
+  @Put(':id')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async updateUser(@Param('id') id: string, @Body() updateData: RegisterDto) {
+    return await this.userService.updateUser(id, updateData);
+  }
+
+  @ApiOperation({summary:'switch the active'})
+  @Put('active/:id')
+  @Auth([UserRoles.SUPERADMIN])
+  async switchActive(@Param('id') id:string){
+    return await this.userService.switchActive(id)
+  }
+
+  @ApiOperation({ summary: 'remove from archive' })
+  @Patch('archive/:id')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async switchToNoArchive(@Param('id') id: string) {
+    return await this.userService.restoreUser(id);
+  }
+
+  @ApiOperation({ summary: 'delete user to archive' })
+  @Delete(':id')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async deleteUser(@Param('id') id: string) {
+    return await this.userService.deleteUser(id);
+  }
+
+  @ApiOperation({ summary: 'delete user in database' })
+  @Delete('/archive/:id')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async deleteArchiveUser(@Param('id') id: string) {
+    return await this.userService.deleteArchiveUser(id);
+  }
+}
