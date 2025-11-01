@@ -18,7 +18,10 @@ import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
                     database:configService.get<string>('DATABASE_DATABASE'),
                     username:configService.get<string>('DATABASE_USERNAME'),
                     synchronize:true,
-                    entities: [__dirname + '/src/core/db/entities/*.entity{.ts,.js}'],
+                    entities: [__dirname + '/**/*.entity.{js,ts}'],
+                    ssl:{
+                        rejectUnauthorized:false
+                    },
                     autoLoadEntities: true,
                 }
             }

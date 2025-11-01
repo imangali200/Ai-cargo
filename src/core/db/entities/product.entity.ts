@@ -19,7 +19,7 @@ export class ProductEntity {
   @Column()
   productName: string;
 
-  @ManyToOne(()=>UserEntity,(user)=> user.products)
+  @ManyToOne(()=>UserEntity,(user)=> user.products,{onDelete:"CASCADE"})
   user:UserEntity
 
   @CreateDateColumn({ type: 'timestamp' })

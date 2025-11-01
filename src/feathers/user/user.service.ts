@@ -61,10 +61,11 @@ export class UserService {
         .where('user.role = :role', { role: 'admin' })
         .andWhere('user.branch IS NULL')
         .getMany();
-      if (!admins || admins.length ===0) throw new NotFoundException('admin is not found');
-      return admins
+      if (!admins || admins.length === 0)
+        throw new NotFoundException('admin is not found');
+      return admins;
     } catch (error) {
-      return error
+      return error;
     }
   }
 
@@ -149,10 +150,49 @@ export class UserService {
         .withDeleted()
         .where('user.id = :id', { id })
         .getOne();
-  
+
       if (!user) throw new NotFoundException('User is id not found');
       await this.userRepository.delete(id);
       return { message: 'deleted successfully' };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getMyLikes(id: string) {
+    try {
+      const posts = await this.userRepository.findOne({
+        where: { id },
+        relations: ['postLikes'],
+      });
+      if (!posts) throw new NotFoundException('post likes is dont find');
+      return posts;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getMyPosts(id: string) {
+    try {
+      const posts = await this.userRepository.findOne({
+        where: { id },
+        relations: ['posts'],
+      });
+      if (!posts) throw new NotFoundException('post is dont find');
+      return posts;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async getMySavedProduct(id: string) {
+    try {
+      const posts = await this.userRepository.findOne({
+        where: { id },
+        relations: ['saved'],
+      });
+      if (!posts) throw new NotFoundException('Saved posts is dont found');
+      return posts;
     } catch (error) {
       return error
     }

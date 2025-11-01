@@ -7,6 +7,8 @@ import { BranchModule } from './feathers/branch/branch.module';
 import { ProductsModule } from './feathers/products/products.module';
 import { AdminModule } from './feathers/admin/admin.module';
 import { PostModule } from './feathers/post/post.module';
+import { ProfileModule } from './feathers/profile/profile.module';
+
 
 @Module({
   imports: [
@@ -18,6 +20,7 @@ import { PostModule } from './feathers/post/post.module';
     ProductsModule,
     AdminModule,
     PostModule,
+    ProfileModule,
   ],
   controllers: [],
   providers: [],

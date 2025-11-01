@@ -1,6 +1,8 @@
-import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserRoles } from '../enums/user.enum';
 import { ProductEntity } from './product.entity';
+import { CommentsEntity } from './comments.entity';
+import { PostEntity } from './post.entity';
 
 @Entity('user')
 export class UserEntity {
@@ -29,11 +31,25 @@ export class UserEntity {
   isActive:boolean
 
 
-  @Column({type:"enum",enum:UserRoles,default:UserRoles.USER})
+  @Column({type:"enum",enum:UserRoles,default:UserRoles.SUPERADMIN})
   role:string
 
-  @OneToMany(()=> ProductEntity , (product)=>product.user)
+  @OneToMany(()=> ProductEntity , (product)=>product.user,{onDelete:'CASCADE'})
   products:ProductEntity[]
+
+  
+  @OneToMany(()=>CommentsEntity,(comment)=>comment.author)
+  comments:CommentsEntity[]
+
+  @OneToMany(()=>PostEntity,(post)=>post.author)
+  posts:PostEntity[]
+
+  @ManyToMany(()=>PostEntity,(post)=>post.likes)
+  postLikes:PostEntity[]
+
+  @OneToMany(()=>PostEntity,(post)=>post.savedBy)
+  @JoinTable()
+  saved:PostEntity[]
 
   @CreateDateColumn({type:'timestamp',default:()=>'CURRENT_TIMESTAMP'})
   createAt:Date
