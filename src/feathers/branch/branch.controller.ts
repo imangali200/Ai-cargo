@@ -17,7 +17,6 @@ import { ApiBody } from '@nestjs/swagger';
 export class BranchController {
   constructor(private readonly branchService: BranchService) {}
 
-  @Auth()
   @Get()
   async getBranch() {
     return await this.branchService.getBranches();
