@@ -18,7 +18,7 @@ export class UserEntity {
   @Column()
   surname: string;
 
-  @Column({unique:true,default:null})
+  @Column({unique:true,nullable:true})
   code: string;
 
   @Column({default:null})
