@@ -15,46 +15,57 @@ export class AdminService {
     private readonly productRepository: Repository<ProductEntity>,
   ) {}
   async updateExcelFile(file: Express.Multer.File, time: string) {
-    if (!time) throw new BadRequestException("You haven't time");
-    const workbook = new ExcelJS.Workbook();
+    try {
+      if (!time) throw new BadRequestException("You haven't time");
+      const workbook = new ExcelJS.Workbook();
 
-    const arrayBuffer = await file.buffer.buffer;
-    await workbook.xlsx.load(arrayBuffer as ArrayBuffer);
+      const arrayBuffer = await file.buffer.buffer;
+      await workbook.xlsx.load(arrayBuffer as ArrayBuffer);
 
-    const worksheet = workbook.worksheets[0];
-    console.log(worksheet);
+      const worksheet = workbook.worksheets[0];
+      console.log(worksheet);
 
-    worksheet.eachRow(async (row) => {
-      const value = String(row.getCell(1).value);
-      const product = await this.productRepository.findOne({
-        where: { productId: value },
+      worksheet.eachRow(async (row) => {
+        const value = String(row.getCell(1).value);
+        const product = await this.productRepository.findOne({
+          where: { productId: value },
+        });
+        if (product) {
+          product.china_warehouse = new Date(time);
+          await this.productRepository.save(product);
+        }
       });
-      if (product) {
-        product.china_warehouse = new Date(time);
-        await this.productRepository.save(product);
-      }
-    });
-    return { message: 'Products updated with China arrival date' };
+      return { message: 'Products updated with China arrival date' };
+    } catch (error) {
+      return error;
+    }
   }
 
   async inAiCargo(productId: string) {
-    const product = await this.productRepository.findOne({
-      where: { productId:productId },
-    });
-    if (!product) throw new NotFoundException('product is not found');
-    product.aicargo = new Date();
-    await this.productRepository.save(product);
-    return { message: 'Products updated with ai cargo arrival date' };
+    try {
+      const product = await this.productRepository.findOne({
+        where: { productId: productId },
+      });
+      if (!product) throw new NotFoundException('product is not found');
+      product.aicargo = new Date();
+      await this.productRepository.save(product);
+      return { message: 'Products updated with ai cargo arrival date' };
+    } catch (error) {
+      return error;
+    }
   }
 
   async completeTracks(productId: string) {
-    console.log(productId)
-    const product = await this.productRepository.findOne({
-      where: { productId:productId },
-    });
-    if (!product) throw new NotFoundException('product is not found');
-    product.given_to_client = new Date();
-    await this.productRepository.save(product);
-    return { message: 'Products given to client' };
+    try {
+      const product = await this.productRepository.findOne({
+        where: { productId: productId },
+      });
+      if (!product) throw new NotFoundException('product is not found');
+      product.given_to_client = new Date();
+      await this.productRepository.save(product);
+      return { message: 'Products given to client' };
+    } catch (error) {
+      return error;
+    }
   }
 }

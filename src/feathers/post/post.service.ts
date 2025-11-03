@@ -36,21 +36,25 @@ export class PostService {
   }
 
   async addToFavorite(id: number, userId: string) {
-    const post = await this.postRepository.findOne({ 
-      where: { id } ,
-      relations:['savedBy']
-    });
-    if (!post) throw new NotFoundException('Post is dont found');
-    const user = await this.userService.findId(userId);
-    if (!user) throw new NotFoundException('This user is not found');
-
-    const alredySaved = post.savedBy.some(u=>u.id === user.id)
-    if(alredySaved){
-      post.savedBy = post.savedBy.filter(i=>i.id !== user.id)
-    }else{
-      post.savedBy.push(user)
+    try {
+      const post = await this.postRepository.findOne({ 
+        where: { id } ,
+        relations:['savedBy']
+      });
+      if (!post) throw new NotFoundException('Post is dont found');
+      const user = await this.userService.findId(userId);
+      if (!user) throw new NotFoundException('This user is not found');
+  
+      const alredySaved = post.savedBy.some(u=>u.id === user.id)
+      if(alredySaved){
+        post.savedBy = post.savedBy.filter(i=>i.id !== user.id)
+      }else{
+        post.savedBy.push(user)
+      }
+      return {message:'saved successfully'}
+    } catch (error) {
+      return error
     }
-    return {message:'saved successfully'}
   }
 
   async getAllPost() {

@@ -9,7 +9,6 @@ export class CreateUser {
   phoneNumber: string;
 
   @IsString()
-  @IsNotEmpty()
   @ApiProperty({example:"1234",description:"write your code"})
   code: string;
 

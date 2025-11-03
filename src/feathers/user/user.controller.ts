@@ -13,7 +13,7 @@ import {
 import { UserService } from './user.service';
 import { Auth } from 'src/core/decorators/auth.decorators';
 import { UserRoles } from 'src/core/db/enums/user.enum';
-import { CreateUser } from './dto/createUser.dto';
+import { CreateUser } from '../admin/dto/createUser.dto';
 import { ApiOperation, ApiProperty } from '@nestjs/swagger';
 import { RegisterDto } from '../auth/dto/register.dto';
 
@@ -21,26 +21,10 @@ import { RegisterDto } from '../auth/dto/register.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'create user by admin' })
-  @Post()
-  @Auth([UserRoles.SUPERADMIN])
-  async createUser(@Body() createUser: CreateUser) {
-    return await this.userService.createByAdmin(createUser);
-  }
 
-  @ApiOperation({ summary: 'get all the users' })
-  @Get()
-  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
-  async getUsers() {
-    return await this.userService.findUsers();
-  }
+  
 
-  @ApiOperation({ summary: 'get users from archive' })
-  @Get('archive')
-  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
-  async archiveUsers() {
-    return await this.userService.getArchiveUsers();
-  }
+  
 
   @ApiOperation({summary:"get admins for the branches"})
   @Auth([UserRoles.SUPERADMIN])

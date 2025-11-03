@@ -58,17 +58,25 @@ export class BranchService {
 
 
   async updateBranch(branchesDto: Partial<BranchesDto>, id: number) {
-    const branch = await this.branchRepository.findOne({ where: { id } });
-    if (!branch) throw new NotFoundException('branch is dont find');
-    Object.assign(branch,branchesDto)
-    await this.branchRepository.save(branch)
-    return {message:'updated successfully'}
+    try {
+      const branch = await this.branchRepository.findOne({ where: { id } });
+      if (!branch) throw new NotFoundException('branch is dont find');
+      Object.assign(branch,branchesDto)
+      await this.branchRepository.save(branch)
+      return {message:'updated successfully'}
+    } catch (error) {
+      return error
+    }
   }
 
   async deleteBranch(id: number) {
-    const branch = await this.branchRepository.findOne({ where: { id } });
-    if (!branch) throw new NotFoundException('Branch is not find');
-    await this.branchRepository.softDelete(id);
-    return { message: 'Branch deleted successfully' };
+    try {
+      const branch = await this.branchRepository.findOne({ where: { id } });
+      if (!branch) throw new NotFoundException('Branch is not find');
+      await this.branchRepository.softDelete(id);
+      return { message: 'Branch deleted successfully' };
+    } catch (error) {
+      return error
+    }
   }
 }

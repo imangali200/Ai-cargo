@@ -7,7 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { UserEntity } from 'src/core/db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto } from '../auth/dto/register.dto';
-import { CreateUser } from './dto/createUser.dto';
+import { CreateUser } from '../admin/dto/createUser.dto';
 import bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { use } from 'passport';
@@ -20,38 +20,58 @@ export class UserService {
     private readonly configService: ConfigService,
   ) {}
   async findPhonenumber(phoneNumber: string) {
-    const user = await this.userRepository.findOne({
-      where: { phoneNumber },
-    });
-    return user;
+    try {
+      const user = await this.userRepository.findOne({
+        where: { phoneNumber },
+      });
+      return user;
+    } catch (error) {
+      return error;
+    }
   }
   async createuser(registerDto: RegisterDto, password: string) {
-    const createData = await this.userRepository.create({
-      ...registerDto,
-      password: password,
-    });
-    const saveUser = await this.userRepository.save(createData);
-    if (!saveUser) throw new BadRequestException('User is not created');
-    return saveUser;
+    try {
+      const createData = await this.userRepository.create({
+        ...registerDto,
+        password: password,
+      });
+      const saveUser = await this.userRepository.save(createData);
+      if (!saveUser) throw new BadRequestException('User is not created');
+      return saveUser;
+    } catch (error) {
+      return error;
+    }
   }
   async createByAdmin(createUser: CreateUser) {
-    const hashedPassword = await this.hashedPassword(createUser.password);
-    const createUserData = await this.userRepository.create({
-      ...createUser,
-      password: hashedPassword,
-    });
-    const saveData = await this.userRepository.save(createUserData);
-    if (!saveData) throw new BadRequestException('User is not created');
-    return { message: 'created successfully' };
+    try {
+      const hashedPassword = await this.hashedPassword(createUser.password);
+      const createUserData = await this.userRepository.create({
+        ...createUser,
+        password: hashedPassword,
+      });
+      const saveData = await this.userRepository.save(createUserData);
+      if (!saveData) throw new BadRequestException('User is not created');
+      return { message: 'created successfully' };
+    } catch (error) {
+      return error;
+    }
   }
   async findId(id: string) {
-    return await this.userRepository.findOne({ where: { id } });
+    try {
+      return await this.userRepository.findOne({ where: { id } });
+    } catch (error) {
+      return error;
+    }
   }
 
   async findUsers() {
-    const users = await this.userRepository.find();
-    if (!users) throw new NotFoundException('No have users');
-    return users;
+    try {
+      const users = await this.userRepository.find();
+      if (!users) throw new NotFoundException('No have users');
+      return users;
+    } catch (error) {
+      return error;
+    }
   }
 
   async getAdmins() {
@@ -103,44 +123,60 @@ export class UserService {
   }
 
   async updateUser(id: string, updateData: Partial<UserEntity>) {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user) {
-      throw new NotFoundException('User not found');
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+      Object.assign(user, updateData);
+      await this.userRepository.save(user);
+      return { message: 'Updated successfully' };
+    } catch (error) {
+      return error;
     }
-    Object.assign(user, updateData);
-    await this.userRepository.save(user);
-    return { message: 'Updated successfully' };
   }
 
   async getArchiveUsers() {
-    const users = await this.userRepository
-      .createQueryBuilder('user')
-      .withDeleted()
-      .where('user.deletedAt IS NOT NULL')
-      .getMany();
-    if (!users.length) {
-      throw new NotFoundException('There are no users in the archive');
+    try {
+      const users = await this.userRepository
+        .createQueryBuilder('user')
+        .withDeleted()
+        .where('user.deletedAt IS NOT NULL')
+        .getMany();
+      if (!users.length) {
+        throw new NotFoundException('There are no users in the archive');
+      }
+      return users;
+    } catch (error) {
+      return error;
     }
-    return users;
   }
 
   async restoreUser(id: string) {
-    const user = await this.userRepository
-      .createQueryBuilder('user')
-      .withDeleted()
-      .where('user.id = :id', { id })
-      .getOne();
-    if (!user) throw new NotFoundException('User not found in archive');
-    await this.userRepository.restore(id);
-    return { message: 'user restore successfully' };
+    try {
+      const user = await this.userRepository
+        .createQueryBuilder('user')
+        .withDeleted()
+        .where('user.id = :id', { id })
+        .getOne();
+      if (!user) throw new NotFoundException('User not found in archive');
+      await this.userRepository.restore(id);
+      return { message: 'user restore successfully' };
+    } catch (error) {
+      return error;
+    }
   }
 
   async deleteUser(id: string) {
-    const user = await this.userRepository.findOne({ where: { id } });
-    if (!user)
-      throw new BadRequestException('user is not have in the database');
-    await this.userRepository.softDelete(id);
-    return { message: 'user moved to archive' };
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user)
+        throw new BadRequestException('user is not have in the database');
+      await this.userRepository.softDelete(id);
+      return { message: 'user moved to archive' };
+    } catch (error) {
+      return error;
+    }
   }
 
   async deleteArchiveUser(id: string) {
@@ -194,7 +230,7 @@ export class UserService {
       if (!posts) throw new NotFoundException('Saved posts is dont found');
       return posts;
     } catch (error) {
-      return error
+      return error;
     }
   }
 

@@ -19,29 +19,40 @@ export class AuthService {
   ) {}
 
   async register(registerDto: RegisterDto) {
-    const checkPhoneNumber = await this.userService.findPhonenumber(
-      registerDto.phoneNumber,
-    );
-    if (checkPhoneNumber)
-      throw new BadRequestException(
-        'Already this number have for the another user',
+    try {
+      const checkPhoneNumber = await this.userService.findPhonenumber(
+        registerDto.phoneNumber,
       );
-    const hashPassword = await this.userService.hashedPassword(registerDto.password);
+      if (checkPhoneNumber)
+        throw new BadRequestException(
+          'Already this number have for the another user',
+        );
+      const hashPassword = await this.userService.hashedPassword(
+        registerDto.password,
+      );
 
-    const createUser = await this.userService.createuser(
-      registerDto,
-      hashPassword,
-    );
-    if (!createUser) throw new BadRequestException('user cannot created');
-    const tokens = await this.tokenService.createTokens(createUser);
-    return tokens;
+      const createUser = await this.userService.createuser(
+        registerDto,
+        hashPassword,
+      );
+      if (!createUser) throw new BadRequestException('user cannot created');
+      const tokens = await this.tokenService.createTokens(createUser);
+      return tokens;
+    } catch (error) {
+      return error;
+    }
   }
   async login(loginDto: LoginDto) {
-    const user = await this.userService.findPhonenumber(loginDto.phoneNumber);
-    if (!user) throw new NotFoundException('not found phone number');
-    const isValid = await bcrypt.compare(loginDto.password, user.password);
-    if (!isValid) throw new BadRequestException('Invalid password');
-    const tokens = await this.tokenService.createTokens(user)
-    return tokens
+    
+    try {
+      const user = await this.userService.findPhonenumber(loginDto.phoneNumber);
+      if (!user) throw new NotFoundException('not found phone number');
+      const isValid = await bcrypt.compare(loginDto.password, user.password);
+      if (!isValid) throw new BadRequestException('Invalid password');
+      const tokens = await this.tokenService.createTokens(user);
+      return tokens;
+    } catch (error) {
+      return error
+    }
   }
 }

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   UploadedFile,
   UseInterceptors,
@@ -9,11 +10,23 @@ import { AdminService } from './admin.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { Auth } from 'src/core/decorators/auth.decorators';
 import { UserRoles } from 'src/core/db/enums/user.enum';
-import { ApiBody, ApiConsumes } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
+import { UserService } from '../user/user.service';
+import { CreateUser } from './dto/createUser.dto';
 
 @Controller('admin')
 export class AdminController {
-  constructor(private readonly adminService: AdminService) {}
+  constructor(
+    private readonly adminService: AdminService,
+    private readonly userService: UserService,
+  ) {}
+
+  @ApiOperation({ summary: 'create user by admin' })
+  @Post('/createuser')
+  @Auth([UserRoles.SUPERADMIN])
+  async createUser(@Body() createUser: CreateUser) {
+    return await this.userService.createByAdmin(createUser);
+  }
 
   @Post('tracks/uploads')
   @UseInterceptors(FileInterceptor('file'))
@@ -45,7 +58,7 @@ export class AdminController {
       },
     },
   })
-  async aiCargoWareHouse(@Body("productId") productId: string) {
+  async aiCargoWareHouse(@Body('productId') productId: string) {
     return await this.adminService.inAiCargo(productId);
   }
 
@@ -59,7 +72,20 @@ export class AdminController {
       },
     },
   })
-  async completeTracks(@Body("productId") productId: string) {
+  async completeTracks(@Body('productId') productId: string) {
     return await this.adminService.completeTracks(productId);
+  }
+
+  @ApiOperation({ summary: 'get all the users' })
+  @Get()
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async getUsers() {
+    return await this.userService.findUsers();
+  }
+  @ApiOperation({ summary: 'get users from archive' })
+  @Get('archive')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async archiveUsers() {
+    return await this.userService.getArchiveUsers();
   }
 }
