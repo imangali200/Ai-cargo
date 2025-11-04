@@ -16,7 +16,7 @@ export class ProductsService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async createProduct(productDto: ProductDto, userId: string) {
+  async createProduct(productDto: ProductDto, userId: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } });
     if (!user) throw new NotFoundException('User is not found');
@@ -62,7 +62,7 @@ export class ProductsService {
     }
   }
 
-  async getOwnProducts(userid: string) {
+  async getOwnProducts(userid: number) {
     try {
       const user = await this.userRepository.findOne({
         where: { id: userid },
@@ -103,7 +103,7 @@ export class ProductsService {
     }
   }
 
-  async deleteProduct(productId: string, userId: string) {
+  async deleteProduct(productId: string, userId: number) {
     try {
       const product = await this.productRepository.findOne({
         where: { productId, user: { id: userId } },

@@ -20,7 +20,7 @@ export class PostService {
     private readonly userService: UserService,
   ) {}
 
-  async createPost(postDto: PostDto, id: string) {
+  async createPost(postDto: PostDto, id: number) {
     try {
       const user = await this.userService.findId(id);
       if (!user) throw new NotFoundException('User is not found');
@@ -35,7 +35,7 @@ export class PostService {
     }
   }
 
-  async addToFavorite(id: number, userId: string) {
+  async addToFavorite(id: number, userId: number) {
     try {
       const post = await this.postRepository.findOne({ 
         where: { id } ,
@@ -67,7 +67,7 @@ export class PostService {
     } catch (error) {}
   }
 
-  async getMyPost(id:string){
+  async getMyPost(id:number){
     try {
       const user = await this.userService.getMyPosts(id)
       return user
@@ -76,12 +76,12 @@ export class PostService {
     }
   }
 
-  async getMyLikes(userId: string) {
+  async getMyLikes(userId: number) {
     const posts = await this.userService.getMyLikes(userId);
     return posts;
   }
-  async addLike(id: number, userId: string) {
-    try {
+  async addLike(id: number, userId: number) {
+    try { 
       const post = await this.postRepository.findOne({
         where: { id },
         relations: ['likes'],

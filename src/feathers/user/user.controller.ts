@@ -43,14 +43,14 @@ export class UserController {
   @ApiOperation({ summary: 'update user' })
   @Put(':id')
   @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
-  async updateUser(@Param('id') id: string, @Body() updateData: RegisterDto) {
+  async updateUser(@Param('id') id: number, @Body() updateData: RegisterDto) {
     return await this.userService.updateUser(id, updateData);
   }
 
   @ApiOperation({summary:'switch the active'})
   @Put('active/:id')
   @Auth([UserRoles.SUPERADMIN])
-  async switchActive(@Param('id') id:string){
+  async switchActive(@Param('id') id:number){
     return await this.userService.switchActive(id)
   }
 
@@ -64,7 +64,7 @@ export class UserController {
   @ApiOperation({ summary: 'delete user to archive' })
   @Delete(':id')
   @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
-  async deleteUser(@Param('id') id: string) {
+  async deleteUser(@Param('id') id: number) {
     return await this.userService.deleteUser(id);
   }
 

@@ -56,7 +56,7 @@ export class UserService {
       return error;
     }
   }
-  async findId(id: string) {
+  async findId(id: number) {
     try {
       return await this.userRepository.findOne({ where: { id } });
     } catch (error) {
@@ -109,7 +109,7 @@ export class UserService {
     }
   }
 
-  async switchActive(id: string) {
+  async switchActive(id: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) throw new NotFoundException('User is not found');
@@ -122,7 +122,7 @@ export class UserService {
     }
   }
 
-  async updateUser(id: string, updateData: Partial<UserEntity>) {
+  async updateUser(id: number, updateData: Partial<UserEntity>) {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user) {
@@ -167,7 +167,7 @@ export class UserService {
     }
   }
 
-  async deleteUser(id: string) {
+  async deleteUser(id: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id } });
       if (!user)
@@ -195,7 +195,7 @@ export class UserService {
     }
   }
 
-  async getMyLikes(id: string) {
+  async getMyLikes(id: number) {
     try {
       const posts = await this.userRepository.findOne({
         where: { id },
@@ -208,7 +208,7 @@ export class UserService {
     }
   }
 
-  async getMyPosts(id: string) {
+  async getMyPosts(id: number) {
     try {
       const posts = await this.userRepository.findOne({
         where: { id },
@@ -221,7 +221,7 @@ export class UserService {
     }
   }
 
-  async getMySavedProduct(id: string) {
+  async getMySavedProduct(id: number) {
     try {
       const posts = await this.userRepository.findOne({
         where: { id },
