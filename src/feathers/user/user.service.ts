@@ -8,9 +8,7 @@ import { UserEntity } from 'src/core/db/entities/user.entity';
 import { Repository } from 'typeorm';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { CreateUser } from '../admin/dto/createUser.dto';
-import bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
-import { use } from 'passport';
 
 @Injectable()
 export class UserService {
@@ -29,11 +27,10 @@ export class UserService {
       return error;
     }
   }
-  async createuser(registerDto: RegisterDto, password: string) {
+  async createuser(registerDto: RegisterDto) {
     try {
       const createData = await this.userRepository.create({
-        ...registerDto,
-        password: password,
+        ...registerDto
       });
       const saveUser = await this.userRepository.save(createData);
       if (!saveUser) throw new BadRequestException('User is not created');
@@ -44,10 +41,8 @@ export class UserService {
   }
   async createByAdmin(createUser: CreateUser) {
     try {
-      const hashedPassword = await this.hashedPassword(createUser.password);
       const createUserData = await this.userRepository.create({
-        ...createUser,
-        password: hashedPassword,
+        ...createUser
       });
       const saveData = await this.userRepository.save(createUserData);
       if (!saveData) throw new BadRequestException('User is not created');
@@ -232,12 +227,5 @@ export class UserService {
     } catch (error) {
       return error;
     }
-  }
-
-  async hashedPassword(password: string) {
-    return await bcrypt.hash(
-      String(password),
-      Number(this.configService.get<number>('HASH_NUMBER')),
-    );
   }
 }

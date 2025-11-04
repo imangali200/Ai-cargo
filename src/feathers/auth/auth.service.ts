@@ -9,6 +9,7 @@ import bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
 import { TokenService } from './token.service';
+import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
@@ -27,14 +28,8 @@ export class AuthService {
         throw new BadRequestException(
           'Already this number have for the another user',
         );
-      const hashPassword = await this.userService.hashedPassword(
-        registerDto.password,
-      );
 
-      const createUser = await this.userService.createuser(
-        registerDto,
-        hashPassword,
-      );
+      const createUser = await this.userService.createuser(registerDto);
       if (!createUser) throw new BadRequestException('user cannot created');
       const tokens = await this.tokenService.createTokens(createUser);
       return tokens;
@@ -43,16 +38,18 @@ export class AuthService {
     }
   }
   async login(loginDto: LoginDto) {
-    
     try {
       const user = await this.userService.findPhonenumber(loginDto.phoneNumber);
       if (!user) throw new NotFoundException('not found phone number');
-      const isValid = await bcrypt.compare(loginDto.password, user.password);
+      const isValid = user.password === loginDto.password;
+
+      if (!isValid) throw new BadRequestException('Invalid password');
+
       if (!isValid) throw new BadRequestException('Invalid password');
       const tokens = await this.tokenService.createTokens(user);
       return tokens;
     } catch (error) {
-      return error
+      return error;
     }
   }
 }
