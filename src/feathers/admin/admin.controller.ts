@@ -30,7 +30,7 @@ export class AdminController {
 
   @Post('tracks/uploads')
   @UseInterceptors(FileInterceptor('file'))
-  @Auth([UserRoles.ADMIN])
+  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
   @ApiConsumes('multipart/form-data')
   @ApiBody({
     schema: {
@@ -49,7 +49,8 @@ export class AdminController {
   }
 
   @Post('tracks')
-  @Auth([UserRoles.ADMIN])
+  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
+
   @ApiBody({
     schema: {
       type: 'object',
@@ -63,7 +64,7 @@ export class AdminController {
   }
 
   @Post('tracks/complete-tracks')
-  @Auth([UserRoles.ADMIN])
+  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
   @ApiBody({
     schema: {
       type: 'object',

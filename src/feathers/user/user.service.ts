@@ -84,7 +84,7 @@ export class UserService {
     }
   }
 
-  async searchUsers(search: string) {
+  async searchUsers(search: number) {
     try {
       const users = await this.userRepository
         .createQueryBuilder('user')
@@ -94,6 +94,7 @@ export class UserService {
         })
         .orWhere('user.surname ILIKE :search', { search: `%${search}%` })
         .orWhere('user.phoneNumber ILIKE :search', { search: `%${search}%` })
+        .orWhere('user.id = :id',{id:search})
         .getMany();
       if (!users || users.length === 0)
         throw new NotFoundException('user is not found');

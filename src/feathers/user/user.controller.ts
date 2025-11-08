@@ -22,10 +22,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
 
-  
-
-  
-
   @ApiOperation({summary:"get admins for the branches"})
   @Auth([UserRoles.SUPERADMIN])
   @Get('admins')
@@ -36,7 +32,7 @@ export class UserController {
   @ApiOperation({ summary: 'search with (name,phonenumber,surname,role)' })
   @Get(':search')
   @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
-  async searchUsers(@Query('search') search: string) {
+  async searchUsers(@Query('search') search: number) {
     return await this.userService.searchUsers(search);
   }
 
