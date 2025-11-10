@@ -51,21 +51,41 @@ export class BranchService {
     }
   }
 
-  async getBranches(){
-    const branches = await this.branchRepository.find()
-    return branches
+  async getBranches() {
+    try {
+      const branches = await this.branchRepository
+        .createQueryBuilder('branches')
+        .where('branches.deleteAt IS NULL')
+        .getMany();
+      return branches;
+    } catch (error) {}
   }
-
 
   async updateBranch(branchesDto: Partial<BranchesDto>, id: number) {
     try {
       const branch = await this.branchRepository.findOne({ where: { id } });
       if (!branch) throw new NotFoundException('branch is dont find');
-      Object.assign(branch,branchesDto)
-      await this.branchRepository.save(branch)
-      return {message:'updated successfully'}
+      Object.assign(branch, branchesDto);
+      await this.branchRepository.save(branch);
+      return { message: 'updated successfully' };
     } catch (error) {
-      return error
+      return error;
+    }
+  }
+
+  async trachBranches() {
+    try {
+      const datas = await this.branchRepository
+        .createQueryBuilder('branches')
+        .withDeleted()
+        .where('branches.deleteAt IS NOT NULL')
+        .getMany();
+      if (!datas || datas.length === 0)
+        throw new NotFoundException('there is no have datas');
+      return datas;
+    } catch (error) {
+      return error;
+      
     }
   }
 
@@ -76,7 +96,7 @@ export class BranchService {
       await this.branchRepository.softDelete(id);
       return { message: 'Branch deleted successfully' };
     } catch (error) {
-      return error
+      return error;
     }
   }
 }
