@@ -85,7 +85,21 @@ export class BranchService {
       return datas;
     } catch (error) {
       return error;
-      
+    }
+  }
+
+  async restoreBranch(id: number) {
+    try {
+      const branch = await this.branchRepository
+        .createQueryBuilder('branches')
+        .withDeleted()
+        .where('branches.id = :id', { id })
+        .getOne();
+      if (!branch) throw new NotFoundException('branch is not found');
+      await this.branchRepository.restore(id)
+      return {message:'restored successfully'}
+    } catch (error) {
+      throw error
     }
   }
 

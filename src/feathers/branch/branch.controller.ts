@@ -22,6 +22,12 @@ export class BranchController {
   async getBranch() {
     return await this.branchService.getBranches();
   }
+  @Auth([UserRoles.SUPERADMIN])
+  @Get('trash')
+  @ApiOperation({summary:'get trash branches'})
+  async trachBranches(){
+    return await this.branchService.trachBranches()
+  }
 
   @Auth([UserRoles.SUPERADMIN])
   @Post('')
@@ -49,12 +55,15 @@ export class BranchController {
     return await this.branchService.updateBranch(branchesDto, id);
   }
 
+
   @Auth([UserRoles.SUPERADMIN])
-  @Get('trash')
-  @ApiOperation({summary:'get trash branches'})
-  async trachBranches(){
-    return await this.branchService.trachBranches()
+  @Put('restore/:id')
+  @ApiOperation({summary:"restore the branch"})
+  async restoreBranch(@Param('id') id:number){
+    return await this.branchService.restoreBranch(id)
   }
+
+  
 
   @Auth([UserRoles.SUPERADMIN])
   @Delete(':id')
