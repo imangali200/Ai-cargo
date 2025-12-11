@@ -10,6 +10,14 @@ export class ProfileController {
     private readonly userService:UserService
   ) {}
 
+  @Get('')
+  @Auth()
+  @ApiOperation({summary:"get profile informations"})
+  // async myProfile(@Req() req:any){
+  //   const id = req.user.id
+  //   return await this.userService.myProfile(id)
+  // }
+
   @Get('mylikes')
   @Auth()
   @ApiOperation({summary:"Get my likes"})
