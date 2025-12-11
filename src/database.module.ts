@@ -13,7 +13,7 @@ import { TypeOrmModule, TypeOrmModuleOptions } from "@nestjs/typeorm";
                 return{
                     type:"postgres",
                     host:configService.get<string>('DATABASE_HOST'),
-                    port:configService.get<number>('DATABASE_PORT'),
+                    port:parseInt(configService.get<string>('DATABASE_PORT') || '5432'),
                     password:configService.get<string>('DATABASE_PASSWORD'),
                     database:configService.get<string>('DATABASE_DATABASE'),
                     username:configService.get<string>('DATABASE_USERNAME'),
