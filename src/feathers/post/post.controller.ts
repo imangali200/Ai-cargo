@@ -20,9 +20,9 @@ export class PostController {
   @Post('comment')
   @Auth()
   @ApiOperation({summary:"write a comment for the post"})
-  async postComment(@Body() commentDto:CommentDto ){
-
-    return await this.postService.postComment(commentDto)
+  async postComment(@Body() commentDto:CommentDto , @Req() req:any ){
+    const userId = req.user.id
+    return await this.postService.postComment(commentDto,userId)
   }
 
     @Post('save/:id')

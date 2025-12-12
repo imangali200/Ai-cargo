@@ -9,6 +9,7 @@ import { Repository } from 'typeorm';
 import { RegisterDto } from '../auth/dto/register.dto';
 import { CreateUser } from '../admin/dto/createUser.dto';
 import { ConfigService } from '@nestjs/config';
+import passport from 'passport';
 
 @Injectable()
 export class UserService {
@@ -30,7 +31,7 @@ export class UserService {
   async createuser(registerDto: RegisterDto) {
     try {
       const createData = await this.userRepository.create({
-        ...registerDto
+        ...registerDto,
       });
       const saveUser = await this.userRepository.save(createData);
       if (!saveUser) throw new BadRequestException('User is not created');
@@ -42,7 +43,7 @@ export class UserService {
   async createByAdmin(createUser: CreateUser) {
     try {
       const createUserData = await this.userRepository.create({
-        ...createUser
+        ...createUser,
       });
       const saveData = await this.userRepository.save(createUserData);
       if (!saveData) throw new BadRequestException('User is not created');
@@ -94,7 +95,7 @@ export class UserService {
         })
         .orWhere('user.surname ILIKE :search', { search: `%${search}%` })
         .orWhere('user.phoneNumber ILIKE :search', { search: `%${search}%` })
-        .orWhere('user.id = :id',{id:search})
+        .orWhere('user.id = :id', { id: search })
         .getMany();
       if (!users || users.length === 0)
         throw new NotFoundException('user is not found');
@@ -227,6 +228,37 @@ export class UserService {
       return posts;
     } catch (error) {
       return error;
+    }
+  }
+  async getProfile(id: number) {
+    try {
+      const profile = await this.userRepository.findOne({
+        where: { id },
+        relations: ['posts'],
+        select: {
+          id: true,
+          name: true,
+          surname: true,
+        },
+      });
+      if (!profile) throw new NotFoundException('not found this user');
+      return profile;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async myProfile(id: number) {
+    try {
+      const profile = await this.userRepository.findOne({
+        where: { id },
+        relations: ['postLikes', 'saved', 'posts'],
+      });
+      if (!profile) throw new NotFoundException('not found this user');
+      delete profile.password;
+      return profile;
+    } catch (error) {
+      throw error;
     }
   }
 }

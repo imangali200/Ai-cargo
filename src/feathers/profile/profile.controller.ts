@@ -13,10 +13,17 @@ export class ProfileController {
   @Get('')
   @Auth()
   @ApiOperation({summary:"get profile informations"})
-  // async myProfile(@Req() req:any){
-  //   const id = req.user.id
-  //   return await this.userService.myProfile(id)
-  // }
+  async myProfile(@Req() req:any){
+    const id = req.user.id
+    return await this.userService.myProfile(id)
+  }
+
+  @Get(':id')
+  @Auth()
+  @ApiOperation({summary:"get profile another people"})
+  async getProfile(@Param("id" )id:number){
+    return await this.userService.getProfile(id)
+  }
 
   @Get('mylikes')
   @Auth()

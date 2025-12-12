@@ -26,7 +26,7 @@ export class PostEntity{
     @JoinTable()
     likes:UserEntity[]
 
-    @ManyToMany(()=>UserEntity,(user)=>user.saved)
+    @OneToMany(()=>UserEntity,(user)=>user.saved)
     savedBy:UserEntity[]
 
 

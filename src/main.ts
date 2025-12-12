@@ -8,7 +8,9 @@ async function bootstrap() {
   origin: ['http://localhost:3000','https://ai-cargo-front.vercel.app'], 
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
   credentials: true,
+  
 });
+
 
   const config = new DocumentBuilder()
     .setTitle("Ai-cargo API")

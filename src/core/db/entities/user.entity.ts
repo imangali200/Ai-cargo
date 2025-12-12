@@ -1,4 +1,4 @@
-import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { BeforeInsert, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { UserRoles } from '../enums/user.enum';
 import { ProductEntity } from './product.entity';
 import { CommentsEntity } from './comments.entity';
@@ -25,7 +25,7 @@ export class UserEntity {
   branch:string
 
   @Column()
-  password: string;
+  password?: string;
 
   @Column({default:false})
   isActive:boolean
@@ -47,7 +47,7 @@ export class UserEntity {
   @ManyToMany(()=>PostEntity,(post)=>post.likes)
   postLikes:PostEntity[]
 
-  @OneToMany(()=>PostEntity,(post)=>post.savedBy)
+  @ManyToOne(()=>PostEntity,(post)=>post.savedBy)
   @JoinTable()
   saved:PostEntity[]
 
