@@ -27,7 +27,8 @@ export class AdminController {
   async createUser(@Body() createUser: CreateUser) {
     return await this.userService.createByAdmin(createUser);
   }
-
+  
+  @ApiOperation({summary:'import file'})
   @Post('tracks/uploads')
   @UseInterceptors(FileInterceptor('file'))
   @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
@@ -50,7 +51,7 @@ export class AdminController {
 
   @Post('tracks')
   @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
-
+  @ApiOperation({summary:"in the branch"})
   @ApiBody({
     schema: {
       type: 'object',
@@ -65,6 +66,7 @@ export class AdminController {
 
   @Post('tracks/complete-tracks')
   @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
+  @ApiOperation({summary:"Complete track"})
   @ApiBody({
     schema: {
       type: 'object',

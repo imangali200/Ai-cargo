@@ -50,7 +50,6 @@ export class ProductsController {
 
   @ApiOperation({summary:'search products'})
   @Get(':productId')
-  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
   async searchByAdmin(@Param('productId') productId:string){
     return await this.productsService.searchProducts(productId)
   }

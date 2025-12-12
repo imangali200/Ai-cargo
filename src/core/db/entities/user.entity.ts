@@ -31,7 +31,7 @@ export class UserEntity {
   isActive:boolean
 
 
-  @Column({type:"enum",enum:UserRoles,default:UserRoles.ADMIN})
+  @Column({type:"enum",enum:UserRoles,default:UserRoles.USER})
   role:string
 
   @OneToMany(()=> ProductEntity , (product)=>product.user,{onDelete:'CASCADE'})
