@@ -46,7 +46,7 @@ export class BranchController {
     },
   })
   @Auth([UserRoles.SUPERADMIN])
-  @Put('id')
+  @Put(':id')
   @ApiOperation({summary:'update branches'})
   async updateBranch(
     @Body() branchesDto: Partial<BranchesDto>,
