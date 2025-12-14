@@ -28,7 +28,7 @@ export class AdminController {
     return await this.userService.createByAdmin(createUser);
   }
   
-  @ApiOperation({summary:'import file'})
+  @ApiOperation({summary:'import file showed in china branch'})
   @Post('tracks/uploads')
   @UseInterceptors(FileInterceptor('file'))
   @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
@@ -48,6 +48,29 @@ export class AdminController {
   ) {
     return await this.adminService.updateExcelFile(file, time);
   }
+
+
+  @ApiOperation({summary:'import file showed in aicargo'})
+  @Post('tracks/uploads-taraz')
+  @UseInterceptors(FileInterceptor('file'))
+  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: { type: 'string', format: 'binary' },
+        time: { type: 'string', example: '2025-10-28 16:00' },
+      },
+    },
+  })
+  async uploadFileTaraz(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('time') time: string,
+  ) {
+    return await this.adminService.updateTarazExcelFile(file, time);
+  }
+
 
   @Post('tracks')
   @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])

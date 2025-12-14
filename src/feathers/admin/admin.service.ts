@@ -41,6 +41,36 @@ export class AdminService {
     }
   }
 
+  async updateTarazExcelFile(file: Express.Multer.File, time: string) {
+    try {
+      if (!time) throw new BadRequestException("You haven't time");
+      const workbook = new ExcelJS.Workbook();
+
+      const arrayBuffer = await file.buffer.buffer;
+      await workbook.xlsx.load(arrayBuffer as ArrayBuffer);
+
+      const worksheet = workbook.worksheets[0];
+      console.log(worksheet);
+
+      worksheet.eachRow(async (row) => {
+        const value = String(row.getCell(1).value);
+        const product = await this.productRepository.findOne({
+          where: { productId: value },
+        });
+        if (product) {
+          product.aicargo = new Date(time);
+          await this.productRepository.save(product);
+        }
+      });
+      return { message: 'Products updated with aicargo arrival date' };
+    } catch (error) {
+      return error;
+    }
+  }
+
+  
+
+
   async inAiCargo(productId: string) {
     try {
       const product = await this.productRepository.findOne({
