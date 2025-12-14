@@ -29,6 +29,13 @@ export class BranchController {
     return await this.branchService.trachBranches()
   }
 
+  @Get(':id')
+  @Auth([UserRoles.SUPERADMIN,UserRoles.ADMIN])
+  @ApiOperation({summary:"get branch by id"})
+  async getBranchById(@Param(":id") id:number){
+    return await this.branchService.getBranchById(id)
+  }
+
   @Auth([UserRoles.SUPERADMIN])
   @Post('')
   @ApiOperation({summary:'create branches'})

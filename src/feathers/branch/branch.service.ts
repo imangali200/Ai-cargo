@@ -61,6 +61,16 @@ export class BranchService {
     } catch (error) {}
   }
 
+  async getBranchById(id:number){
+    try {
+      const branch = await this.branchRepository.findOne({where:{id}})
+      if(!branch) throw new NotFoundException("branch is not found")
+        return branch
+    } catch (error) {
+      throw error
+    }
+  }
+
   async updateBranch(branchesDto: Partial<BranchesDto>, id: number) {
     try {
       const branch = await this.branchRepository.findOne({ where: { id } });
