@@ -93,9 +93,10 @@ export class ProductsService {
 
   async searchProducts(id: string) {
     try {
-      const product = await this.productRepository.findOne({
-        where: { productId: id },
-      });
+      const product = await this.productRepository
+        .createQueryBuilder('product')
+        .where('product.productId LIKE :id',{id:`%${id}%`})
+        .getMany()
       if (!product) throw new NotFoundException('product is not found');
       return product;
     } catch (error) {
