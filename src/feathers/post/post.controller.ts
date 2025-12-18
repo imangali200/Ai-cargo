@@ -49,4 +49,9 @@ export class PostController {
     return await this.postService.addLike(id,userId)
   }
 
+  @Get('search/:name')
+  @ApiOperation({summary:"post search"})
+  async searchPost(@Param('name') name:string){
+    return await this.postService.searchPost(name)
+  }
 }

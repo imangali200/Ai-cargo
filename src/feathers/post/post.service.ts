@@ -136,4 +136,18 @@ export class PostService {
       return error;
     }
   }
+
+  async searchPost(name: string) {
+    try {
+      const posts = await this.postRepository
+        .createQueryBuilder('post')
+        .where('post.review LIKE :name', { name: `%${name}%` })
+        .getMany();
+
+      if (!posts) throw new NotFoundException('posts is not found');
+      return posts
+    } catch (error) {
+      return error;
+    }
+  }
 }
