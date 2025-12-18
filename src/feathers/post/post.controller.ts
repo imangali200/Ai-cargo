@@ -35,7 +35,6 @@ export class PostController {
 
 
   @Get()
-  @Auth()
   @ApiOperation({summary:"get all the post"})
   async getAllPost(){
     return await this.postService.getAllPost()
