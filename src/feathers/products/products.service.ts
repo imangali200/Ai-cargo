@@ -24,29 +24,39 @@ export class ProductsService {
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) throw new NotFoundException('User is not found');
 
+      console.log('=== Creating product ===');
+      console.log('ProductId:', productDto.productId);
+      console.log('UserId:', userId);
+
       // Check if there's imported track data for this productId
       const importedTrack = await this.importedTrackRepository.findOne({
         where: { productId: productDto.productId },
       });
 
+      console.log('Found imported track:', importedTrack ? 'YES' : 'NO');
+
       const product = new ProductEntity();
       product.productId = productDto.productId;
       product.productName = productDto.productName;
       product.user = user;
+      
       // Copy dates from imported track if exists
       if (importedTrack) {
+        console.log('Linking user to imported track...');
         product.china_warehouse = importedTrack.china_warehouse;
         product.aicargo = importedTrack.aicargo;
         product.given_to_client = importedTrack.given_to_client;
         
         // Link this track to the user who claimed it
         importedTrack.user = user;
-        await this.importedTrackRepository.save(importedTrack);
+        const savedTrack = await this.importedTrackRepository.save(importedTrack);
+        console.log('Imported track saved with user:', savedTrack.user ? 'SUCCESS' : 'FAILED');
       }
 
       const saveProduct = await this.productRepository.save(product);
       if (saveProduct) return { message: 'created successfully' };
     } catch (error) {
+      console.log('Error:', error);
       return error;
     }
   }
