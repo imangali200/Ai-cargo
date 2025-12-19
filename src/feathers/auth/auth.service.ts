@@ -52,4 +52,8 @@ export class AuthService {
       return error;
     }
   }
+
+  async refresh(refreshToken: string) {
+    return await this.tokenService.refreshTokens(refreshToken);
+  }
 }
