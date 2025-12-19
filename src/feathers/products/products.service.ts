@@ -38,6 +38,10 @@ export class ProductsService {
         product.china_warehouse = importedTrack.china_warehouse;
         product.aicargo = importedTrack.aicargo;
         product.given_to_client = importedTrack.given_to_client;
+        
+        // Link this track to the user who claimed it
+        importedTrack.user = user;
+        await this.importedTrackRepository.save(importedTrack);
       }
 
       const saveProduct = await this.productRepository.save(product);

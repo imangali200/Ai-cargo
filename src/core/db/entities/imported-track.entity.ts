@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { UserEntity } from './user.entity';
 
 @Entity('imported_tracks')
 export class ImportedTrackEntity {
@@ -22,6 +24,10 @@ export class ImportedTrackEntity {
 
   @Column({ type: 'timestamp', nullable: true })
   given_to_client: Date;
+
+  // Track owner - null if no one has claimed this track yet
+  @ManyToOne(() => UserEntity, { nullable: true, onDelete: 'SET NULL' })
+  user: UserEntity;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

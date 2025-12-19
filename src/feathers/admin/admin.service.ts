@@ -193,6 +193,7 @@ export class AdminService {
   async getAllImportedTracks() {
     try {
       const tracks = await this.importedTrackRepository.find({
+        relations: ['user'],
         order: { createdAt: 'DESC' },
       });
       return tracks;
@@ -205,6 +206,7 @@ export class AdminService {
     try {
       const tracks = await this.importedTrackRepository
         .createQueryBuilder('track')
+        .leftJoinAndSelect('track.user', 'user')
         .where('track.productId LIKE :productId', { productId: `%${productId}%` })
         .orderBy('track.createdAt', 'DESC')
         .getMany();
