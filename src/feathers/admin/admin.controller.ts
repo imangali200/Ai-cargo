@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
@@ -113,5 +114,19 @@ export class AdminController {
   @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
   async archiveUsers() {
     return await this.userService.getArchiveUsers();
+  }
+
+  @ApiOperation({ summary: 'Get all imported tracks' })
+  @Get('imported-tracks')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async getAllImportedTracks() {
+    return await this.adminService.getAllImportedTracks();
+  }
+
+  @ApiOperation({ summary: 'Search imported tracks by productId' })
+  @Get('imported-tracks/search')
+  @Auth([UserRoles.ADMIN, UserRoles.SUPERADMIN])
+  async searchImportedTracks(@Query('productId') productId: string) {
+    return await this.adminService.searchImportedTrack(productId);
   }
 }

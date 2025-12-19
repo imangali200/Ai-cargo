@@ -4,7 +4,7 @@ import { ProductEntity } from 'src/core/db/entities/product.entity';
 import { Repository } from 'typeorm';
 import { ProductDto } from './dto/create_product.dto';
 import { UserEntity } from 'src/core/db/entities/user.entity';
-import { use } from 'passport';
+import { ImportedTrackEntity } from 'src/core/db/entities/imported-track.entity';
 
 @Injectable()
 export class ProductsService {
@@ -14,23 +14,37 @@ export class ProductsService {
 
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+
+    @InjectRepository(ImportedTrackEntity)
+    private readonly importedTrackRepository: Repository<ImportedTrackEntity>,
   ) {}
 
   async createProduct(productDto: ProductDto, userId: number) {
     try {
       const user = await this.userRepository.findOne({ where: { id: userId } });
-    if (!user) throw new NotFoundException('User is not found');
+      if (!user) throw new NotFoundException('User is not found');
 
-    const product = await this.productRepository.create({
-      ...productDto,
-      user: user,
-    });
-    const saveProduct = await this.productRepository.save(product);
-    if (saveProduct) return { message: 'created successfully' };
+      // Check if there's imported track data for this productId
+      const importedTrack = await this.importedTrackRepository.findOne({
+        where: { productId: productDto.productId },
+      });
+
+      const product = new ProductEntity();
+      product.productId = productDto.productId;
+      product.productName = productDto.productName;
+      product.user = user;
+      // Copy dates from imported track if exists
+      if (importedTrack) {
+        product.china_warehouse = importedTrack.china_warehouse;
+        product.aicargo = importedTrack.aicargo;
+        product.given_to_client = importedTrack.given_to_client;
+      }
+
+      const saveProduct = await this.productRepository.save(product);
+      if (saveProduct) return { message: 'created successfully' };
     } catch (error) {
-      return error
+      return error;
     }
-    
   }
   async getProducts() {
     try {
