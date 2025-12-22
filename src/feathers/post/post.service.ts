@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PostDto } from './dto/post_create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostEntity } from 'src/core/db/entities/post.entity';
@@ -7,9 +7,14 @@ import { UserService } from '../user/user.service';
 import { UserEntity } from 'src/core/db/entities/user.entity';
 import { CommentDto } from './dto/comment.dto';
 import { CommentsEntity } from 'src/core/db/entities/comments.entity';
+import cloudinary from 'src/core/config/cloudinary.config';
+import { ConfigService } from '@nestjs/config';
+import streamifier from 'streamifier';
 
 @Injectable()
 export class PostService {
+
+  private cloudinary = cloudinary;
   constructor(
     @InjectRepository(PostEntity)
     private readonly postRepository: Repository<PostEntity>,
@@ -18,20 +23,49 @@ export class PostService {
     private readonly commentRepository: Repository<CommentsEntity>,
 
     private readonly userService: UserService,
-  ) {}
 
-  async createPost(postDto: PostDto, id: number) {
+    private configService: ConfigService
+  ) {
+    cloudinary.config({
+      cloud_name: this.configService.get('CLOUDINARY_CLOUD_NAME'),
+      api_key: this.configService.get('CLOUDINARY_API_KEY'),
+      api_secret: this.configService.get('CLOUDINARY_API_SECRET'),
+    });
+
+  }
+
+  async createPost(postDto: PostDto,photo:Express.Multer.File, id: number) {
     try {
       const user = await this.userService.findId(id);
       if (!user) throw new NotFoundException('User is not found');
+
+
+      if(!photo){
+        throw new BadRequestException("photo is required")
+      }
+      let imgUrl: string | undefined;
+    if (photo) {
+      imgUrl = await new Promise((resolve, reject) => {
+        const uploadStream = this.cloudinary.uploader.upload_stream(
+          { folder: 'posts' },
+          (error, result) => {
+            if (result) resolve(result.secure_url);
+            else reject(error);
+          }
+        );
+        streamifier.createReadStream(photo.buffer).pipe(uploadStream);
+      });
+    }
+
       const post = await this.postRepository.create({
         ...postDto,
         author: user,
+        imgUrl:imgUrl
       });
       await this.postRepository.save(post);
       return { message: 'post is created successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -124,7 +158,6 @@ export class PostService {
       if (!post) throw new NotFoundException('post is not found');
       const authorInfo = await this.userService.findId(userId);
       if (!authorInfo) throw new NotFoundException('post is not found');
-      console.log(authorInfo);
       const comment = await this.commentRepository.create({
         ...commentDto,
         author: authorInfo,

@@ -1936,6 +1936,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/from@npm:^0":
+  version: 0.1.32
+  resolution: "@types/from@npm:0.1.32"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/b8e7cd5c3bdbd79d6fff17a59d18623a3062f01e69e5a8cf052d22029100714e492aa0f1bf91d386dc2a64c0ee6db5bbe16d77e163cabe9dd664dbc9963c4d99
+  languageName: node
+  linkType: hard
+
 "@types/http-errors@npm:*":
   version: 2.0.5
   resolution: "@types/http-errors@npm:2.0.5"
@@ -2136,6 +2145,15 @@ __metadata:
   version: 2.0.3
   resolution: "@types/stack-utils@npm:2.0.3"
   checksum: 10c0/1f4658385ae936330581bcb8aa3a066df03867d90281cdf89cc356d404bd6579be0f11902304e1f775d92df22c6dd761d4451c804b0a4fba973e06211e9bd77c
+  languageName: node
+  linkType: hard
+
+"@types/streamifier@npm:^0":
+  version: 0.1.2
+  resolution: "@types/streamifier@npm:0.1.2"
+  dependencies:
+    "@types/node": "npm:*"
+  checksum: 10c0/475f787ae2b992a22f3b794ad0920d2b43e0541d126020c1edb25ebd60b736122d1c4db6813aa8fa9ad5cfed49b700a1e6ee5154acabac2ebc2bed7b40c0d667
   languageName: node
   linkType: hard
 
@@ -2727,20 +2745,25 @@ __metadata:
     "@nestjs/websockets": "npm:^11.1.8"
     "@types/bcrypt": "npm:^6.0.0"
     "@types/express": "npm:^5.0.0"
+    "@types/from": "npm:^0"
     "@types/jest": "npm:^30.0.0"
     "@types/multer": "npm:^2.0.0"
     "@types/node": "npm:^22.10.7"
     "@types/passport-jwt": "npm:^4.0.1"
+    "@types/streamifier": "npm:^0"
     "@types/supertest": "npm:^6.0.2"
     bcrypt: "npm:^6.0.0"
     bcryptjs: "npm:^3.0.2"
     class-transformer: "npm:^0.5.1"
     class-validator: "npm:^0.14.2"
+    cloudinary: "npm:^2.8.0"
     eslint: "npm:^9.18.0"
     eslint-config-prettier: "npm:^10.0.1"
     eslint-plugin-prettier: "npm:^5.2.2"
     exceljs: "npm:^4.4.0"
+    from: "npm:^0.1.7"
     globals: "npm:^16.0.0"
+    import: "npm:^0.0.6"
     jest: "npm:^30.0.0"
     multer: "npm:^2.0.2"
     passport: "npm:^0.7.0"
@@ -2751,6 +2774,7 @@ __metadata:
     rxjs: "npm:^7.8.1"
     socket.io: "npm:^4.8.1"
     source-map-support: "npm:^0.5.21"
+    streamifier: "npm:^0.1.1"
     supertest: "npm:^7.0.0"
     swagger-ui-express: "npm:^5.0.1"
     ts-jest: "npm:^29.2.5"
@@ -3577,6 +3601,16 @@ __metadata:
   version: 1.0.4
   resolution: "clone@npm:1.0.4"
   checksum: 10c0/2176952b3649293473999a95d7bebfc9dc96410f6cbd3d2595cf12fd401f63a4bf41a7adbfd3ab2ff09ed60cb9870c58c6acdd18b87767366fabfc163700f13b
+  languageName: node
+  linkType: hard
+
+"cloudinary@npm:^2.8.0":
+  version: 2.8.0
+  resolution: "cloudinary@npm:2.8.0"
+  dependencies:
+    lodash: "npm:^4.17.21"
+    q: "npm:^1.5.1"
+  checksum: 10c0/67e1830f5ab5d9378c021a2057d54d09757df3487f43015fa83885240055ad6ba193ef2392fa104ffa498e32b4e1e378da30661364b65dec81b159b58225f790
   languageName: node
   linkType: hard
 
@@ -4727,6 +4761,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"from@npm:^0.1.7":
+  version: 0.1.7
+  resolution: "from@npm:0.1.7"
+  checksum: 10c0/3aab5aea8fe8e1f12a5dee7f390d46a93431ce691b6222dcd5701c5d34378e51ca59b44967da1105a0f90fcdf5d7629d963d51e7ccd79827d19693bdcfb688d4
+  languageName: node
+  linkType: hard
+
 "fs-constants@npm:^1.0.0":
   version: 1.0.0
   resolution: "fs-constants@npm:1.0.0"
@@ -5146,6 +5187,17 @@ __metadata:
   bin:
     import-local-fixture: fixtures/cli.js
   checksum: 10c0/94cd6367a672b7e0cb026970c85b76902d2710a64896fa6de93bd5c571dd03b228c5759308959de205083e3b1c61e799f019c9e36ee8e9c523b993e1057f0433
+  languageName: node
+  linkType: hard
+
+"import@npm:^0.0.6":
+  version: 0.0.6
+  resolution: "import@npm:0.0.6"
+  dependencies:
+    optimist: "npm:0.3.x"
+  bin:
+    import: import
+  checksum: 10c0/27906247d9846eb5a6ce77b9d5a169949d9d0e8ef1b23bddc9cd9f636e26f5e3db4604811090c69d195a80c031aecf6deaa3357b3542ba5a6fb265a1a16dd8c6
   languageName: node
   linkType: hard
 
@@ -6774,6 +6826,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"optimist@npm:0.3.x":
+  version: 0.3.7
+  resolution: "optimist@npm:0.3.7"
+  dependencies:
+    wordwrap: "npm:~0.0.2"
+  checksum: 10c0/510175b89c4a2410ae0df38ce505a9a1bd4a3a4698006d976da208cd745f1fe9ac081a6f89202b4c99f9efd7a2efd84f356c28ef010921ec5f7416fef22a8a7e
+  languageName: node
+  linkType: hard
+
 "optionator@npm:^0.9.3":
   version: 0.9.4
   resolution: "optionator@npm:0.9.4"
@@ -7237,6 +7298,13 @@ __metadata:
   version: 7.0.1
   resolution: "pure-rand@npm:7.0.1"
   checksum: 10c0/9cade41030f5ec95f5d55a11a71404cd6f46b69becaad892097cd7f58e2c6248cd0a933349ca7d21336ab629f1da42ffe899699b671bc4651600eaf6e57f837e
+  languageName: node
+  linkType: hard
+
+"q@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "q@npm:1.5.1"
+  checksum: 10c0/7855fbdba126cb7e92ef3a16b47ba998c0786ec7fface236e3eb0135b65df36429d91a86b1fff3ab0927b4ac4ee88a2c44527c7c3b8e2a37efbec9fe34803df4
   languageName: node
   linkType: hard
 
@@ -7852,6 +7920,13 @@ __metadata:
   version: 2.0.2
   resolution: "statuses@npm:2.0.2"
   checksum: 10c0/a9947d98ad60d01f6b26727570f3bcceb6c8fa789da64fe6889908fe2e294d57503b14bf2b5af7605c2d36647259e856635cd4c49eab41667658ec9d0080ec3f
+  languageName: node
+  linkType: hard
+
+"streamifier@npm:^0.1.1":
+  version: 0.1.1
+  resolution: "streamifier@npm:0.1.1"
+  checksum: 10c0/132035d8519c65f3903047b06b003201d3eaef6eb164cf5ba86ee22c2203c3a0109198946dc579002e39f704b568bedc8ce61a729e0a8dd00249d0a9658353a4
   languageName: node
   linkType: hard
 
@@ -8934,6 +9009,13 @@ __metadata:
   version: 1.0.0
   resolution: "wordwrap@npm:1.0.0"
   checksum: 10c0/7ed2e44f3c33c5c3e3771134d2b0aee4314c9e49c749e37f464bf69f2bcdf0cbf9419ca638098e2717cff4875c47f56a007532f6111c3319f557a2ca91278e92
+  languageName: node
+  linkType: hard
+
+"wordwrap@npm:~0.0.2":
+  version: 0.0.3
+  resolution: "wordwrap@npm:0.0.3"
+  checksum: 10c0/b3b212f8b2167091f59bc60929ada2166eb157abb6c8c82e2a705fe5aa5876440c3966ab39eb6c7bcb2ff0ac0c8d9fba726a9c2057b83bd65cdc1858f9d816ce
   languageName: node
   linkType: hard
 

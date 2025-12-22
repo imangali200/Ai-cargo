@@ -13,6 +13,9 @@ export class PostEntity{
     @Column()
     review:string
 
+    @Column({ nullable: true })
+    imgUrl:string
+
     @Column('int', { default: 0 })
     likesCount:number
 

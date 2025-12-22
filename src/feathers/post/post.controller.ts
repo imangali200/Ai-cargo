@@ -1,9 +1,12 @@
-import { Body, Controller, Get, Param, Post, Req } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Auth } from 'src/core/decorators/auth.decorators';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
 import { PostDto } from './dto/post_create.dto';
 import { CommentDto } from './dto/comment.dto';
+
+
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('post')
 export class PostController {
@@ -12,9 +15,16 @@ export class PostController {
   @Post()
   @Auth()
   @ApiOperation({summary:"create post"})
-  async createPost(@Body() postDto:PostDto , @Req() req:any){
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Create post with image',
+    type: PostDto, 
+  })
+  @UseInterceptors(FileInterceptor('photo'))
+  async createPost(@Body() postDto:PostDto ,@UploadedFile() photo:Express.Multer.File, @Req() req:any){
+    console.log(photo)
     const userId = req.user.id
-    return await this.postService.createPost(postDto,userId)
+    return await this.postService.createPost(postDto,photo,userId)
   }
 
   @Post('comment')

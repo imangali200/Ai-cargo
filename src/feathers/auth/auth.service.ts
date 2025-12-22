@@ -9,7 +9,6 @@ import bcrypt from 'node_modules/bcryptjs';
 import { ConfigService } from '@nestjs/config';
 import { LoginDto } from './dto/login.dto';
 import { TokenService } from './token.service';
-import { use } from 'passport';
 
 @Injectable()
 export class AuthService {
