@@ -39,6 +39,7 @@ export class PostService {
       const user = await this.userService.findId(id);
       if (!user) throw new NotFoundException('User is not found');
 
+        console.log(process.env.CLOUDINAR_API_KEY)
 
       if(!photo){
         throw new BadRequestException("photo is required")
@@ -158,6 +159,7 @@ export class PostService {
       if (!post) throw new NotFoundException('post is not found');
       const authorInfo = await this.userService.findId(userId);
       if (!authorInfo) throw new NotFoundException('post is not found');
+      console.log(authorInfo);
       const comment = await this.commentRepository.create({
         ...commentDto,
         author: authorInfo,
