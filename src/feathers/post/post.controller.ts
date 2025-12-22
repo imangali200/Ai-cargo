@@ -7,6 +7,7 @@ import { CommentDto } from './dto/comment.dto';
 
 
 import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @Controller('post')
 export class PostController {
@@ -20,7 +21,9 @@ export class PostController {
     description: 'Create post with image',
     type: PostDto, 
   })
-  @UseInterceptors(FileInterceptor('photo'))
+  @UseInterceptors(FileInterceptor('photo',{
+    storage: memoryStorage(),
+  }))
   async createPost(@Body() postDto:PostDto ,@UploadedFile() photo:Express.Multer.File, @Req() req:any){
     console.log(photo)
     const userId = req.user.id
