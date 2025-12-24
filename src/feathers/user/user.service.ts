@@ -129,7 +129,7 @@ export class UserService {
       await this.userRepository.save(user);
       return { message: 'Updated successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -145,7 +145,7 @@ export class UserService {
       }
       return users;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -160,7 +160,7 @@ export class UserService {
       await this.userRepository.restore(id);
       return { message: 'user restore successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -172,7 +172,7 @@ export class UserService {
       await this.userRepository.softDelete(id);
       return { message: 'user moved to archive' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -188,7 +188,7 @@ export class UserService {
       await this.userRepository.delete(id);
       return { message: 'deleted successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -201,7 +201,7 @@ export class UserService {
       if (!posts) throw new NotFoundException('post likes is dont find');
       return posts;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -214,22 +214,11 @@ export class UserService {
       if (!posts) throw new NotFoundException('post is dont find');
       return posts;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
-  async getMySavedProduct(id: number) {
-    try {
-      const posts = await this.userRepository.findOne({
-        where: { id },
-        relations: ['saved'],
-      });
-      if (!posts) throw new NotFoundException('Saved posts is dont found');
-      return posts;
-    } catch (error) {
-      return error;
-    }
-  }
+
   async getProfile(id: number) {
     try {
       const profile = await this.userRepository.findOne({
@@ -244,7 +233,7 @@ export class UserService {
       if (!profile) throw new NotFoundException('not found this user');
       return profile;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

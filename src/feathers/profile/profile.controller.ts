@@ -25,28 +25,4 @@ export class ProfileController {
     return await this.userService.getProfile(id)
   }
 
-  @Get('mylikes')
-  @Auth()
-  @ApiOperation({summary:"Get my likes"})
-  async myLikes(@Req() req:any){
-    const id = req.user.id
-    return await this.userService.getMyLikes(id)
-  }
-
-  @Get('posts')
-  @Auth()
-  @ApiOperation({summary:"get my all the  posts"})
-  async ownPosts(@Req() req:any){
-    const id = req.user.id
-    return await this.userService.getMyPosts(id)
-  }
-
-  @Get('savedProduct')
-  @Auth()
-  @ApiOperation({summary:'get my saved produt'})
-  async mySavedProduct(@Req() req:any){
-    const id = req.user.id
-    return await this.userService.getMySavedProduct(id)
-  }
-
 }

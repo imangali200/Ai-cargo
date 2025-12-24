@@ -85,9 +85,10 @@ export class PostService {
       } else {
         post.savedBy.push(user);
       }
+      await this.postRepository.save(post)
       return { message: 'saved successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

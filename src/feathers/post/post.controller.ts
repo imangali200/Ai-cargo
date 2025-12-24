@@ -38,7 +38,7 @@ export class PostController {
     return await this.postService.postComment(commentDto,userId)
   }
 
-    @Post('save/:id')
+  @Post('save/:id')
   @Auth()
   @ApiOperation({summary:'add to favorites'})
   async addFavorite(@Param('id') id:number , @Req() req:any){
