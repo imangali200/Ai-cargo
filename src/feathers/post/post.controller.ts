@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { PostService } from './post.service';
 import { Auth } from 'src/core/decorators/auth.decorators';
 import { ApiBody, ApiConsumes, ApiOperation } from '@nestjs/swagger';
@@ -66,4 +66,14 @@ export class PostController {
   async searchPost(@Param('name') name:string){
     return await this.postService.searchPost(name)
   }
+
+
+  @Auth()
+  @Delete(':id')
+  @ApiOperation({summary:"delete own post"})
+  async deleteOwnPost(@Param("id") id:number , @Req() req:any){
+    const userId = req.user.id
+    return await this.postService.deleteOwnPost(userId,id)
+  }
+
 }

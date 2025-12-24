@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { PostDto } from './dto/post_create.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PostEntity } from 'src/core/db/entities/post.entity';
@@ -182,6 +182,28 @@ export class PostService {
       return posts
     } catch (error) {
       return error;
+    }
+  }
+
+
+  async deleteOwnPost(userId:number,id:number){
+    try {
+      const post = await this.postRepository.findOne({
+        where:{id},
+        relations:['author']
+      })
+
+      if(!post){
+        throw new NotFoundException("Post is not found")
+      }
+
+      if(post.author.id !== userId){
+        throw new ForbiddenException("You can delete only your own post")
+      }
+      await this.postRepository.delete(id)
+      return {message:"deleted successfully"}
+    } catch (error) {
+      throw error
     }
   }
 }
