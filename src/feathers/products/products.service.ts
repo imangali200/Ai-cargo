@@ -60,16 +60,6 @@ export class ProductsService {
       return error;
     }
   }
-  async getProducts() {
-    try {
-      const products = await this.productRepository.find();
-      if (!products || products.length === 0)
-        throw new NotFoundException('Still no have product');
-      return products;
-    } catch (error) {
-      return error
-    }
-  }
 
   async restoreProduct(productId: string, id: string) {
     try {

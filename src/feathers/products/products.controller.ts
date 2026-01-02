@@ -25,13 +25,6 @@ export class ProductsController {
     return await this.productsService.restoreProduct(id,userId)
   }
 
-  @ApiOperation({summary:'get all the product (only admins)'})
-  @Get()
-  @Auth([UserRoles.ADMIN,UserRoles.SUPERADMIN])
-  async getProducts(){
-    return await this.productsService.getProducts()
-  }
-
   @ApiOperation({summary:'Get own products'})
   @Get('/my')
   @Auth()

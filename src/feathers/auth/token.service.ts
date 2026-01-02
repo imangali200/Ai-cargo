@@ -39,33 +39,5 @@ export class TokenService {
     return {accessToken,refreshToken}
   }
 
-  async refreshTokens(refreshToken: string) {
-    try {
-      // Verify the refresh token
-      const payload = this.jwtService.verify(refreshToken);
-      
-      // Check if it's a refresh token
-      if (payload.type !== 'refresh') {
-        throw new UnauthorizedException('Invalid token type');
-      }
 
-      // Find the user
-      const user = await this.userService.findId(payload.id);
-      if (!user) {
-        throw new NotFoundException('User not found');
-      }
-
-      // Generate new tokens
-      const tokens = await this.createTokens(user);
-      return tokens;
-    } catch (error) {
-      if (error.name === 'TokenExpiredError') {
-        throw new UnauthorizedException('Refresh token expired');
-      }
-      if (error.name === 'JsonWebTokenError') {
-        throw new UnauthorizedException('Invalid refresh token');
-      }
-      throw error;
-    }
-  }
 }

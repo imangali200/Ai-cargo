@@ -52,7 +52,4 @@ export class AuthService {
     }
   }
 
-  async refresh(refreshToken: string) {
-    return await this.tokenService.refreshTokens(refreshToken);
-  }
 }

@@ -18,18 +18,4 @@ export class AuthController {
     return await this.authService.register(registerDto)
   }
 
-  @ApiOperation({ summary: 'Refresh access token using refresh token' })
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        refreshToken: { type: 'string', example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...' },
-      },
-      required: ['refreshToken'],
-    },
-  })
-  @Post('/refresh')
-  async refresh(@Body('refreshToken') refreshToken: string) {
-    return await this.authService.refresh(refreshToken);
-  }
 }
