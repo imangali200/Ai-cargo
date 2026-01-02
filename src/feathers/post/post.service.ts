@@ -38,7 +38,7 @@ export class PostService {
       const user = await this.userService.findId(id);
       if (!user) throw new NotFoundException('User is not found');
 
-        console.log(process.env.CLOUDINAR_API_KEY)
+
 
       if(!photo){
         throw new BadRequestException("photo is required")
@@ -110,7 +110,9 @@ export class PostService {
       });
       if (!posts) throw new NotFoundException('Post is not found');
       return posts;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getMyPost(id: number) {
@@ -118,7 +120,7 @@ export class PostService {
       const user = await this.userService.getMyPosts(id);
       return user;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -147,7 +149,7 @@ export class PostService {
       await this.postRepository.save(post);
       return { message: 'liked succesfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -159,7 +161,7 @@ export class PostService {
       if (!post) throw new NotFoundException('post is not found');
       const authorInfo = await this.userService.findId(userId);
       if (!authorInfo) throw new NotFoundException('post is not found');
-      console.log(authorInfo);
+
       const comment = await this.commentRepository.create({
         ...commentDto,
         author: authorInfo,
@@ -168,7 +170,7 @@ export class PostService {
       await this.commentRepository.save(comment);
       return { message: 'Comment created successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -182,7 +184,7 @@ export class PostService {
       if (!posts) throw new NotFoundException('posts is not found');
       return posts
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

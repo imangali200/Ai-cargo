@@ -24,16 +24,10 @@ export class ProductsService {
       const user = await this.userRepository.findOne({ where: { id: userId } });
       if (!user) throw new NotFoundException('User is not found');
 
-      console.log('=== Creating product ===');
-      console.log('ProductId:', productDto.productId);
-      console.log('UserId:', userId);
-
       // Check if there's imported track data for this productId
       const importedTrack = await this.importedTrackRepository.findOne({
         where: { productId: productDto.productId },
       });
-
-      console.log('Found imported track:', importedTrack ? 'YES' : 'NO');
 
       const product = new ProductEntity();
       product.productId = productDto.productId;
@@ -42,22 +36,15 @@ export class ProductsService {
       
       // Copy dates from imported track if exists
       if (importedTrack) {
-        console.log('Linking user to imported track...');
-        product.china_warehouse = importedTrack.china_warehouse;
-        product.aicargo = importedTrack.aicargo;
-        product.given_to_client = importedTrack.given_to_client;
-        
         // Link this track to the user who claimed it
         importedTrack.user = user;
-        const savedTrack = await this.importedTrackRepository.save(importedTrack);
-        console.log('Imported track saved with user:', savedTrack.user ? 'SUCCESS' : 'FAILED');
+        await this.importedTrackRepository.save(importedTrack);
       }
 
       const saveProduct = await this.productRepository.save(product);
       if (saveProduct) return { message: 'created successfully' };
     } catch (error) {
-      console.log('Error:', error);
-      return error;
+      throw error;
     }
   }
 
@@ -75,8 +62,7 @@ export class ProductsService {
       await this.productRepository.restore(product.id)
       return {message:'Product is restored'}
     } catch (error) {
-      console.log(error);
-      return { message: 'Error' };
+      throw error;
     }
   }
 
@@ -89,7 +75,7 @@ export class ProductsService {
       if (!user) throw new NotFoundException('Not found user');
       return user.products;
     } catch (error) {
-      return error
+      throw error;
     }
   }
 
@@ -105,7 +91,7 @@ export class ProductsService {
       if (!products) throw new NotFoundException('In archive no have products');
       return products;
     } catch (error) {
-      return error
+      throw error;
     }
   }
 
@@ -118,7 +104,7 @@ export class ProductsService {
       if (!product) throw new NotFoundException('product is not found');
       return product;
     } catch (error) {
-      return error
+      throw error;
     }
   }
 
@@ -132,7 +118,7 @@ export class ProductsService {
   
       return { message: 'Deleted successfully' };
     } catch (error) {
-      return error
+      throw error;
     }
   }
 }

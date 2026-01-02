@@ -26,7 +26,6 @@ export class AdminService {
       await workbook.xlsx.load(arrayBuffer as ArrayBuffer);
 
       const worksheet = workbook.worksheets[0];
-      console.log(worksheet);
 
       const rows: string[] = [];
       worksheet.eachRow((row) => {
@@ -65,7 +64,7 @@ export class AdminService {
 
       return { message: 'Products updated with China arrival date' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -78,7 +77,6 @@ export class AdminService {
       await workbook.xlsx.load(arrayBuffer as ArrayBuffer);
 
       const worksheet = workbook.worksheets[0];
-      console.log(worksheet);
 
       const rows: string[] = [];
       worksheet.eachRow((row) => {
@@ -117,7 +115,7 @@ export class AdminService {
 
       return { message: 'Products updated with aicargo arrival date' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -153,7 +151,7 @@ export class AdminService {
 
       return { message: 'Products updated with ai cargo arrival date' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -186,7 +184,7 @@ export class AdminService {
 
       return { message: 'Products given to client' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -198,7 +196,7 @@ export class AdminService {
       });
       return tracks;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -212,7 +210,7 @@ export class AdminService {
         .getMany();
       return tracks;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

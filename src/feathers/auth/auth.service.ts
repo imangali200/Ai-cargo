@@ -33,7 +33,7 @@ export class AuthService {
       const tokens = await this.tokenService.createTokens(createUser);
       return tokens;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async login(loginDto: LoginDto) {
@@ -48,7 +48,7 @@ export class AuthService {
       const tokens = await this.tokenService.createTokens(user);
       return tokens;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 

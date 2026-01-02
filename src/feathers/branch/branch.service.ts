@@ -47,7 +47,7 @@ export class BranchService {
       await this.userRep.save(admin);
       return { message: 'New branch is created successfully' };
     } catch (error) {
-      return { error };
+      throw error;
     }
   }
 
@@ -58,7 +58,9 @@ export class BranchService {
         .where('branches.deleteAt IS NULL')
         .getMany();
       return branches;
-    } catch (error) {}
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getBranchById(id:number){
@@ -79,7 +81,7 @@ export class BranchService {
       await this.branchRepository.save(branch);
       return { message: 'updated successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -94,7 +96,7 @@ export class BranchService {
         throw new NotFoundException('there is no have datas');
       return datas;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -120,7 +122,7 @@ export class BranchService {
       await this.branchRepository.softDelete(id);
       return { message: 'Branch deleted successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 }

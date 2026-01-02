@@ -25,7 +25,7 @@ export class UserService {
       });
       return user;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async createuser(registerDto: RegisterDto) {
@@ -37,7 +37,7 @@ export class UserService {
       if (!saveUser) throw new BadRequestException('User is not created');
       return saveUser;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async createByAdmin(createUser: CreateUser) {
@@ -49,14 +49,14 @@ export class UserService {
       if (!saveData) throw new BadRequestException('User is not created');
       return { message: 'created successfully' };
     } catch (error) {
-      return error;
+      throw error;
     }
   }
   async findId(id: number) {
     try {
       return await this.userRepository.findOne({ where: { id } });
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -66,7 +66,7 @@ export class UserService {
       if (!users) throw new NotFoundException('No have users');
       return users;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -81,7 +81,7 @@ export class UserService {
         throw new NotFoundException('admin is not found');
       return admins;
     } catch (error) {
-      return error;
+      throw error;
     }
   }
 
@@ -101,8 +101,7 @@ export class UserService {
         throw new NotFoundException('user is not found');
       return users;
     } catch (error) {
-      console.log(error);
-      return { message: 'error' };
+      throw error;
     }
   }
 
@@ -114,8 +113,7 @@ export class UserService {
       await this.userRepository.save(user);
       return { message: 'User is activate switched successfully' };
     } catch (error) {
-      console.log(error);
-      return { message: 'error' };
+      throw error;
     }
   }
 
